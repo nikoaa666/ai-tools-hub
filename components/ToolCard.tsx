@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
 
 interface Tool {
   id: string;
@@ -44,8 +43,8 @@ export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLogg
   const colorClass = categoryColors[tool.category] || 'bg-gray-50 text-gray-600';
 
   return (
-    <Link
-      href={`/tools/${tool.id}`}
+    <a
+      href={`#${tool.id}`}
       className="group block bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-xl hover:border-gray-200 transition-all duration-200"
     >
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -88,6 +87,6 @@ export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLogg
           </button>
         )}
       </div>
-    </Link>
+    </a>
   );
 }

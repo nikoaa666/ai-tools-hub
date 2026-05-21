@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import SearchBar from '@/components/SearchBar';
 import CategoryBar from '@/components/CategoryBar';
 import ToolCard from '@/components/ToolCard';
+import ToolDetailClient from './tools/[id]/ToolDetailClient';
 
 interface Tool {
   id: string;
@@ -11,6 +12,7 @@ interface Tool {
   category: string;
   url: string;
   description: string;
+  usage: string;
   likes: number;
 }
 
@@ -23,6 +25,7 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<SortBy>('likes');
   const [user, setUser] = useState<any>(null);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
+  const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTools();
@@ -30,6 +33,15 @@ export default function Home() {
       setUser(data.user);
       if (data.user) fetchFavorites(data.user.id);
     });
+
+    // 监听 hash 变化
+    function handleHash() {
+      const hash = window.location.hash.slice(1);
+      setSelectedToolId(hash || null);
+    }
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
   async function fetchTools() {
@@ -63,6 +75,11 @@ export default function Home() {
     }
   }
 
+  // 如果选中了工具，显示详情页
+  if (selectedToolId) {
+    return <ToolDetailClient id={selectedToolId} />;
+  }
+
   const hasFilter = search || category !== '全部';
 
   const filtered = useMemo(() => {
@@ -76,7 +93,6 @@ export default function Home() {
       return matchCategory && matchSearch;
     });
 
-    // 排序：搜索时按相关度优先，否则按选择的排序方式
     if (search) {
       const q = search.toLowerCase();
       result.sort((a, b) => {
