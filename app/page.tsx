@@ -46,16 +46,21 @@ export default function Home() {
   }, []);
 
   async function fetchTools() {
-    const { data } = await supabase.from('tools').select('*');
-    setTools((data as Tool[]) || []);
+    try {
+      const { data, error } = await supabase.from('tools').select('*');
+      if (error) { console.error('fetchTools error:', error); return; }
+      setTools((data as Tool[]) || []);
+    } catch (e) { console.error('fetchTools exception:', e); }
   }
 
   async function fetchFavorites(userId: string) {
-    const { data } = await supabase
-      .from('favorites')
-      .select('tool_id')
-      .eq('user_id', userId);
-    setFavoriteIds(new Set((data || []).map((f: any) => f.tool_id)));
+    try {
+      const { data } = await supabase
+        .from('favorites')
+        .select('tool_id')
+        .eq('user_id', userId);
+      setFavoriteIds(new Set((data || []).map((f: any) => f.tool_id)));
+    } catch (e) { console.error('fetchFavorites exception:', e); }
   }
 
   async function handleLike(id: string) {
