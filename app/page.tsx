@@ -13,6 +13,7 @@ interface Tool {
   url: string;
   description: string;
   usage: string;
+  image?: string;
   likes: number;
 }
 

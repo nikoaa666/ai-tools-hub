@@ -7,6 +7,7 @@ interface Tool {
   category: string;
   url: string;
   description: string;
+  image?: string;
   likes: number;
 }
 
@@ -47,13 +48,26 @@ export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLogg
       href={`#${tool.id}`}
       className="group block bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-xl hover:border-gray-200 transition-all duration-200"
     >
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition text-base">
-          {tool.name}
-        </h3>
-        <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full shrink-0 ${colorClass}`}>
-          {tool.category}
-        </span>
+      <div className="flex items-start gap-3 mb-3">
+        {tool.image && (
+          <img
+            src={tool.image}
+            alt={tool.name}
+            className="w-10 h-10 rounded-xl shrink-0 object-contain bg-gray-50 p-1"
+            loading="lazy"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          />
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition text-base">
+              {tool.name}
+            </h3>
+            <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full shrink-0 ${colorClass}`}>
+              {tool.category}
+            </span>
+          </div>
+        </div>
       </div>
       <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-2">{tool.description}</p>
       <div className="flex items-center gap-2.5" onClick={(e) => e.preventDefault()}>

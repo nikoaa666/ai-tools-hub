@@ -12,12 +12,13 @@ interface Tool {
   category: string;
   url: string;
   description: string;
+  image?: string;
   likes: number;
 }
 
 export default function Admin() {
   const [tools, setTools] = useState<Tool[]>([]);
-  const [form, setForm] = useState({ name: '', category: '对话', url: '', description: '' });
+  const [form, setForm] = useState({ name: '', category: '对话', url: '', description: '', image: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function Admin() {
     }
 
     await supabase.from('tools').insert([{ ...cleaned, likes: 0 }]);
-    setForm({ name: '', category: '对话', url: '', description: '' });
+    setForm({ name: '', category: '对话', url: '', description: '', image: '' });
     fetchTools();
   }
 

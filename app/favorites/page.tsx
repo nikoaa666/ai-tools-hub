@@ -10,6 +10,7 @@ interface Tool {
   category: string;
   url: string;
   description: string;
+  image?: string;
   likes: number;
 }
 
@@ -61,14 +62,19 @@ export default function FavoritesPage() {
         <div className="space-y-3">
           {tools.map((tool) => (
             <div key={tool.id} className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 flex items-center gap-3">
+                {tool.image && (
+                  <img src={tool.image} alt={tool.name} className="w-10 h-10 rounded-xl shrink-0 object-contain bg-gray-50 p-1" loading="lazy" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                )}
+                <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <a href={tool.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-blue-600 transition">
+                  <a href={`#${tool.id}`} className="font-semibold text-gray-900 hover:text-blue-600 transition">
                     {tool.name}
                   </a>
                   <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{tool.category}</span>
                 </div>
                 <p className="text-sm text-gray-500 truncate">{tool.description}</p>
+                </div>
               </div>
               <button
                 onClick={() => removeFavorite(tool.id)}

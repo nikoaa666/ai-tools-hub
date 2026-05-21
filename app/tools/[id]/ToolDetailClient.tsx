@@ -9,6 +9,7 @@ interface Tool {
   url: string;
   description: string;
   usage: string;
+  image?: string;
   likes: number;
 }
 
@@ -82,7 +83,17 @@ export default function ToolDetailClient({ id }: { id: string }) {
 
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
         <div className="flex items-start justify-between gap-4 mb-4">
-          <h1 className="text-3xl font-bold text-gray-900">{tool.name}</h1>
+          <div className="flex items-center gap-4">
+            {tool.image && (
+              <img
+                src={tool.image}
+                alt={tool.name}
+                className="w-14 h-14 rounded-2xl object-contain bg-gray-50 p-2"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            )}
+            <h1 className="text-3xl font-bold text-gray-900">{tool.name}</h1>
+          </div>
           <span className={`text-sm font-medium px-3 py-1 rounded-full border shrink-0 ${colorClass}`}>
             {tool.category}
           </span>
