@@ -35,7 +35,8 @@ const categoryColors: Record<string, string> = {
 export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLoggedIn }: ToolCardProps) {
   const [liked, setLiked] = useState(false);
 
-  function handleLike() {
+  function handleLike(e: React.MouseEvent) {
+    e.preventDefault();
     if (liked) return;
     setLiked(true);
     onLike(tool.id);
@@ -45,7 +46,7 @@ export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLogg
 
   return (
     <a
-      href={`#${tool.id}`}
+      href={`/tools/${tool.id}`}
       className="group block bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-xl hover:border-gray-200 transition-all duration-200"
     >
       <div className="flex items-start gap-3 mb-3">
@@ -87,7 +88,7 @@ export default function ToolCard({ tool, isFavorited, onLike, onFavorite, isLogg
         </button>
         {isLoggedIn && (
           <button
-            onClick={() => onFavorite(tool.id)}
+            onClick={(e) => { e.preventDefault(); onFavorite(tool.id); }}
             className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition font-medium ${
               isFavorited
                 ? 'bg-yellow-50 text-yellow-600'

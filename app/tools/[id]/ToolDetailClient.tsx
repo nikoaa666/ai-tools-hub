@@ -42,7 +42,7 @@ export default function ToolDetailClient({ id }: { id: string }) {
       .eq('id', id)
       .single();
     if (error || !data) {
-      window.location.hash = '';
+      window.location.href = '/';
       return;
     }
     setTool(data as Tool);

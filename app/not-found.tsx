@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
 export default function NotFound() {
   const [path, setPath] = useState('');
@@ -22,12 +21,12 @@ export default function NotFound() {
       <div className="text-6xl mb-4">404</div>
       <h1 className="text-xl font-bold text-gray-900 mb-2">页面未找到</h1>
       <p className="text-gray-500 mb-6">该页面不存在或已被移除</p>
-      <Link
+      <a
         href="/"
         className="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition font-medium"
       >
         返回首页
-      </Link>
+      </a>
     </main>
   );
 }

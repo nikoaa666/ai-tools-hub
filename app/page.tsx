@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 import SearchBar from '@/components/SearchBar';
 import CategoryBar from '@/components/CategoryBar';
 import ToolCard from '@/components/ToolCard';
-import ToolDetailClient from './tools/[id]/ToolDetailClient';
 
 interface Tool {
   id: string;
@@ -26,7 +25,6 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<SortBy>('likes');
   const [user, setUser] = useState<any>(null);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
-  const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTools();
@@ -34,15 +32,6 @@ export default function Home() {
       setUser(data.user);
       if (data.user) fetchFavorites(data.user.id);
     });
-
-    // 监听 hash 变化
-    function handleHash() {
-      const hash = window.location.hash.slice(1);
-      setSelectedToolId(hash || null);
-    }
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
   async function fetchTools() {
@@ -79,11 +68,6 @@ export default function Home() {
       await supabase.from('favorites').insert([{ user_id: user.id, tool_id: toolId }]);
       setFavoriteIds((prev) => new Set(prev).add(toolId));
     }
-  }
-
-  // 如果选中了工具，显示详情页
-  if (selectedToolId) {
-    return <ToolDetailClient id={selectedToolId} />;
   }
 
   const hasFilter = search || category !== '全部';
@@ -126,12 +110,9 @@ export default function Home() {
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
-      {/* 搜索区 */}
       <div className="mb-5">
         <SearchBar value={search} onChange={setSearch} />
       </div>
-
-      {/* 分类 + 排序 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <CategoryBar active={category} onSelect={setCategory} />
         <div className="flex items-center gap-2 shrink-0">
@@ -147,8 +128,6 @@ export default function Home() {
           </select>
         </div>
       </div>
-
-      {/* 结果统计 + 清除筛选 */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-500">
           {hasFilter ? (
@@ -170,8 +149,6 @@ export default function Home() {
           </button>
         )}
       </div>
-
-      {/* 工具列表 */}
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-gray-400 text-lg mb-2">没有找到相关工具</p>
